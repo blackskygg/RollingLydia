@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QListWidgetItem>
 #include <QTimer>
+#include <QCloseEvent>
 #include "ui_viewproblem.h"
 
 namespace Ui {
@@ -55,8 +56,6 @@ private slots:
 
     void on_listAsked_itemDoubleClicked(QListWidgetItem *item);
 
-    void on_problem_bFont_clicked();
-
     void on_horizSpeed_valueChanged(int value);
 
     void on_bRoll_clicked();
@@ -67,7 +66,11 @@ private slots:
 
     void on_labelProblem_doubleClicked();
 
+    void on_horizFontSize_valueChanged(int value);
+
 private:
+    const QString sessionFileName = "RollingLydiaSession.txt";
+
     Ui::MainWindow *ui;
     Ui::DialogProblem *dialogProblem_ui;
     QDialog *dialogProblem;
@@ -77,6 +80,9 @@ private:
     int hz = 1;
 
 private:
+    void closeEvent(QCloseEvent *event) override;
+    void loadSession();
+    void saveSession();
     void transferCurrItem(QListWidget *listSrc, QListWidget *listDst);
     void displayProblem(ProblemListItem *item);
 };

@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>696</width>
-    <height>414</height>
+    <width>847</width>
+    <height>512</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,13 +24,13 @@
     <widget class="QTextBrowser" name="textBrowser">
      <property name="font">
       <font>
-       <pointsize>21</pointsize>
+       <pointsize>17</pointsize>
       </font>
      </property>
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout" stretch="2,3,2">
+    <layout class="QHBoxLayout" name="horizontalLayout" stretch="2,1,8,1,2">
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
@@ -45,9 +45,29 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="bFont">
+      <widget class="QLabel" name="label">
        <property name="text">
-        <string>Font</string>
+        <string>Font Size: </string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSlider" name="horizFontSize">
+       <property name="value">
+        <number>17</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="labelFontSize">
+       <property name="text">
+        <string>17px</string>
        </property>
       </widget>
      </item>

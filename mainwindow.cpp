@@ -24,16 +24,36 @@ MainWindow::MainWindow(QWidget *parent) :
     timer->stop();
 
     // Connect Events
-    connect(dialogProblem_ui->bFont, SIGNAL(clicked()),
-            this, SLOT(on_problem_bFont_clicked()));
     connect(timer, SIGNAL(timeout()), SLOT(on_timeout()));
-    connect(ui->labelProblem, SIGNAL(clicked(bool)), this, SLOT(on_labelProblem_doubleClicked()));
+    connect(ui->labelProblem, SIGNAL(clicked(bool)),
+            this, SLOT(on_labelProblem_doubleClicked()));
+    connect(dialogProblem_ui->horizFontSize, SIGNAL(valueChanged(int)),
+            this, SLOT(on_horizFontSize_valueChanged(int)));
+
+    loadSession();
+    on_horizFontSize_valueChanged(19);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
     delete dialogProblem_ui;
+}
+
+void MainWindow::saveSession()
+{
+
+}
+
+void MainWindow::loadSession()
+{
+
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    saveSession();
+    event->accept();
 }
 
 void MainWindow::transferCurrItem(QListWidget *listSrc, QListWidget *listDst)
@@ -100,14 +120,14 @@ void MainWindow::on_bReloadProblem_clicked()
     QString text, line;
     QStringList content;
     while (!file.atEnd()) {
-        if("BEGIN\n" != file.readLine())
+        if(!file.readLine().startsWith("BEGIN"))
             continue;
         text = file.readLine();
         text.chop(1); // discard trailling newline
         content.clear();
         while (!file.atEnd()) {
             line = file.readLine();
-            if ("END\n" == line)
+            if (line.startsWith("END"))
                 break;
             else
                 content.append(line);
@@ -169,14 +189,6 @@ void MainWindow::on_listAsked_itemDoubleClicked(QListWidgetItem *item)
     displayProblem((ProblemListItem *)item);
 }
 
-void MainWindow::on_problem_bFont_clicked()
-{
-   bool ok;
-   QFont font = QFontDialog::getFont(&ok, dialogProblem);
-   if (ok)
-        dialogProblem_ui->textBrowser->setFont(font);
-}
-
 void MainWindow::on_horizSpeed_valueChanged(int value)
 {
     hz = 20*value/100+1; // From 1Hz to 20Hz
@@ -232,4 +244,12 @@ void MainWindow::on_labelProblem_doubleClicked()
 {
     if (ui->bStop->isEnabled()) return; // Can't clicked till set.
     displayProblem(currProblemItem);
+}
+
+void MainWindow::on_horizFontSize_valueChanged(int value)
+{
+    QFont font = dialogProblem_ui->textBrowser->font();
+    font.setPixelSize(value+1);
+    dialogProblem_ui->textBrowser->setFont(font);
+    dialogProblem_ui->labelFontSize->setText(tr("%1px").arg(value+1));
 }
