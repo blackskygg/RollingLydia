@@ -1,0 +1,52 @@
+﻿BEGIN
+A+B Problem
+Calculate a + b
+Input:
+
+The input will be consist of a series of pairs of integers a and b,separated by a space, one pair of integers per line, 0 0 means the end of the input, and do not need to output.
+Output:
+
+For each pair of input integers a and b you should output the sum of a and b in one line,and with one line of output for each line in input.
+Sample Input:
+
+1 5
+0 0
+Sample Output:
+
+6
+END
+
+
+BEGIN
+Jumping Cows
+Starting at time 1. One or more potions may be skipped in each turn. Determine which potions to take to get the highest jump.
+END
+
+BEGIN
+Be careful 
+“Be careful about the precision!”When Tyr doing his mathematic homework,teacher Mr.Qian always giving this warning to him.Now,Tyr has finished his mathematic homework,and here is your task to check whether Tyr’s answer is correct or not.
+Input:
+
+The input consists of several cases.The first line gives the case number N, the next part has N cases.Each case consists of two numbers R and I.R is a real number; I is an integer number.
+Output:
+
+For each case please give your check.If R rounds to I,then print “Correct” in a single line, or,print “Not Correct”.For more detail,please look at the samples.
+END
+
+
+BEGIN
+House of Kittens 
+You have recently adopted some kittens, and now you want to make a house for them. On the outside, the house will be shaped like a convex polygon with N vertices. On the inside, it will be divided into several rooms by M interior walls connecting vertices along straight lines. No two walls will ever cross, but there might be multiple walls touching a single vertex.
+
+So why is your house of kittens going to be so special? At every vertex, you are going to build a pillar entirely out of catnip! Kittens will be able to play with any pillar that touches the room they are in, giving them a true luxury home.
+
+To make the house even more exciting, you want to use different flavors of catnip. A single pillar can only use one flavor, but different pillars can use different flavors. There is only one problem. If some room does not have access to all the catnip flavors in the house, then the kittens in that room will feel left out and be sad.
+
+Your task is to choose what flavor of catnip to use for each vertex in such a way that (a) every flavor is accessible from every room, and (b) as many flavors as possible are used.
+
+In the following example, three different flavors (represented by red, green, and blue dots) are distributed across an 8-sided house while keeping the kittens in every room happy:
+
+
+
+In the image above, starting at the left corner of the top wall and going clockwise, the colors here are: green, blue, red, red, blue, green, blue, red.
+END

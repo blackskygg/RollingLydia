@@ -69,8 +69,12 @@ void MainWindow::on_bReloadName_clicked()
 
     ui->listNRolled->clear();
     QListWidgetItem *item;
+    QString line;
     while (!file.atEnd()) {
-        item = new QListWidgetItem(file.readLine(), ui->listNRolled);
+        line = file.readLine();
+        while (line.endsWith("\n") || line.endsWith(" ")) line.chop(1);
+        if (line.isEmpty()) continue; // Empty line.
+        item = new QListWidgetItem(line, ui->listNRolled);
         item->setSizeHint(QSize(item->sizeHint().width(), 20));
     }
 
