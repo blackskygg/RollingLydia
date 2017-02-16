@@ -3,6 +3,8 @@ The program randomly picks up a name and a problem from a name list and a proble
 
 It's written to assist questioning in classrooms.
 
+Download the latest releases here: https://github.com/blackskygg/RollingLydia/releases
+
 # System Requirements
 You have to get ``The Visual C++ Redistributable Packages`` installed on you computer to run this program.
 
