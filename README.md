@@ -1,7 +1,7 @@
 # RollingLydia
-Randomly picks up a name and a problem from list.
+The program randomly picks up a name and a problem from a name list and a problem list, respectively.
 
-Written to assist questioning in classroom.
+It's written to assist questioning in classrooms.
 
 # Usage
 The program is splitted into 3 tabs, namely, the Rolling Tab, the Name List Tab and the Problem List Tab.
@@ -21,7 +21,7 @@ Once the roll is stoped, you can click on the problem title, and the description
 
 The speed can be adjusted according to your need, and the unit is Hz(the number of names displayed within 1s).
 
-And you can also choose to roll the name only, without rolling the problem, this is useful when asking a question that's not in a problem list.
+And you can also choose to roll the name only, which is useful when asking a question that's not in the problem list.
 
 ##2. the Name List Tab
 It looks like this.
@@ -33,7 +33,7 @@ There are two lists, one containing the names that haven't been picked up yet, a
 The function of the button should be quite clear, and you can use them to move names between the two lists.
 
 ### the Name List Format
-The name list file shoudl follow the following format and should be saved using the ``UTF-8 encoding``, this is very important.
+The name list file should follow the following format and should be saved using the ``UTF-8 encoding``, this is very important.
 
 If you don't konw how. Use your favorite search engine.
 
@@ -65,7 +65,7 @@ When you double-click on an item, a window will pop up for you, and it looks lik
 ![image](https://github.com/blackskygg/RollingLydia/blob/master/screenshots/problem.png)
 
 ### the Name List Format
-The problem list file shoudl follow the following format and should be also be saved using ``UTF-8 encoding``.
+The problem list file should follow the following format and should be also be saved using ``UTF-8 encoding``.
 
 The file should look like:
 
