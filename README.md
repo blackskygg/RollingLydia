@@ -3,6 +3,11 @@ The program randomly picks up a name and a problem from a name list and a proble
 
 It's written to assist questioning in classrooms.
 
+# System Requirements
+You have to get ``The Visual C++ Redistributable Packages`` installed on you computer to run this program.
+
+Download Link: https://www.microsoft.com/en-us/download/details.aspx?id=48145
+
 # Usage
 The program is splitted into 3 tabs, namely, the Rolling Tab, the Name List Tab and the Problem List Tab.
 
