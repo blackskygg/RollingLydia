@@ -5,11 +5,6 @@ It's written to assist questioning in classrooms.
 
 Download the latest releases here: https://github.com/blackskygg/RollingLydia/releases
 
-# System Requirements
-You have to get ``The Visual C++ Redistributable Packages`` installed on you computer to run this program.
-
-Download Link: https://www.microsoft.com/en-us/download/details.aspx?id=48145
-
 # Usage
 The program is splitted into 3 tabs, namely, the Rolling Tab, the Name List Tab and the Problem List Tab.
 
