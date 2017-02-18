@@ -41,17 +41,11 @@ If you don't konw how. Use your favorite search engine.
 
 The file should look like:
 
-  name1
-  
-  name2
-  
-  name3
-  
-  name4
-  
-  ...
-
-  
+    name1
+    name2
+    name3
+    name4
+    ...
 
 See https://github.com/blackskygg/RollingLydia/blob/master/namelist.txt for an example.
 
@@ -71,26 +65,19 @@ The problem list file should follow the following format and should be also be s
 
 The file should look like:
 
-  BEGIN
-  
-  problem title 1
-  
-  problem description 1
-  
-  END
-  
-  
-  （arbitary contents)
-  
-  
-  BEGIN
-  
-  problem title 2
-  
-  problem description 2
-  
-  END
-  
-  ...
+    BEGIN
+    problem title 1
+    problem description 1
+    ...
+    END
+    ...
+    （arbitary contents)
+    ...
+    BEGIN
+    problem title 2 
+    problem description 2
+    ...
+    END
+    ...
   
 See https://github.com/blackskygg/RollingLydia/blob/master/problemlist.txt for an example.
