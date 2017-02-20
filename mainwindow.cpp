@@ -3,8 +3,10 @@
 #include "ui_viewproblem.h"
 #include <QFile>
 #include <QDir>
+#include <QPalette>
 #include <QFileDialog>
 #include <QFontDialog>
+#include <QColorDialog>
 #include <QDialog>
 #include <QMessageBox>
 #include <QTextBrowser>
@@ -28,6 +30,14 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(on_spinTextSize_valueChanged(int)));
     connect(dialogProblem_ui->fontComboBox, SIGNAL(currentFontChanged(QFont)),
             this, SLOT(on_fontComboBox_currentFontChanged(QFont)));
+    connect(dialogProblem_ui->bTextColor, SIGNAL(clicked()),
+            this, SLOT(on_bTextColor_clicked()));
+    connect(dialogProblem_ui->bTextItalic, SIGNAL(toggled(bool)),
+            this, SLOT(on_bTextItalic_toggled(bool)));
+    connect(dialogProblem_ui->bTextBold, SIGNAL(toggled(bool)),
+            this, SLOT(on_bTextBold_toggled(bool)));
+    connect(dialogProblem_ui->bTextUnderline, SIGNAL(toggled(bool)),
+            this, SLOT(on_bTextUnderline_toggled(bool)));
 }
 
 MainWindow::~MainWindow()
@@ -268,5 +278,38 @@ void MainWindow::on_fontComboBox_currentFontChanged(const QFont &f)
 {
     QFont font = dialogProblem_ui->textBrowser->font();
     font.setFamily(f.family());
+    dialogProblem_ui->textBrowser->setFont(font);
+}
+
+void MainWindow::on_bTextColor_clicked()
+{
+    QPalette pal;
+    pal = dialogProblem_ui->textBrowser->palette();
+
+    QColor color = QColorDialog::getColor(pal.color(QPalette::Text), this, "Pick a color.");
+    if(color.isValid()) {
+        pal.setColor(QPalette::Text, color);
+        dialogProblem_ui->textBrowser->setPalette(pal);
+    }
+}
+
+void MainWindow::on_bTextItalic_toggled(bool checked)
+{
+    QFont font = dialogProblem_ui->textBrowser->font();
+    font.setItalic(checked);
+    dialogProblem_ui->textBrowser->setFont(font);
+}
+
+void MainWindow::on_bTextBold_toggled(bool checked)
+{
+    QFont font = dialogProblem_ui->textBrowser->font();
+    font.setBold(checked);
+    dialogProblem_ui->textBrowser->setFont(font);
+}
+
+void MainWindow::on_bTextUnderline_toggled(bool checked)
+{
+    QFont font = dialogProblem_ui->textBrowser->font();
+    font.setUnderline(checked);
     dialogProblem_ui->textBrowser->setFont(font);
 }

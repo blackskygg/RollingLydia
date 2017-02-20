@@ -139,6 +139,9 @@
        <property name="shortcut">
         <string>Ctrl+I</string>
        </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
        <property name="flat">
         <bool>true</bool>
        </property>
@@ -179,6 +182,9 @@
        </property>
        <property name="shortcut">
         <string>Ctrl+B</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
        </property>
        <property name="flat">
         <bool>true</bool>
@@ -221,6 +227,9 @@
        </property>
        <property name="shortcut">
         <string>Ctrl+U</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
        </property>
        <property name="flat">
         <bool>true</bool>
