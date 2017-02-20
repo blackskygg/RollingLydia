@@ -3,6 +3,7 @@
 #include "ui_viewproblem.h"
 #include <QFile>
 #include <QDir>
+#include <QTime>
 #include <QPalette>
 #include <QFileDialog>
 #include <QFontDialog>
@@ -17,13 +18,21 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     setupUi();
 
-    // Setup Timer
-    timer = new QTimer(this);
-    timer->setInterval(1);
-    timer->stop();
+    // Setup Timers
+    timerRoll = new QTimer(this);
+    timerRoll->setInterval(1);
+    timerRoll->stop();
+
+    timerTimer = new QTimer(this);
+    timerTimer->setInterval(1000);
+    timerTimer->stop();
+
+    timerStopWatch = new QTimer(this);
+    timerStopWatch->setInterval(1000);
+    timerStopWatch->stop();
 
     // Connect Events
-    connect(timer, SIGNAL(timeout()), SLOT(on_timeout()));
+    connect(timerRoll, SIGNAL(timeout()), SLOT(on_timeRoll_timeout()));
     connect(ui->labelProblem, SIGNAL(clicked(bool)),
             this, SLOT(on_labelProblem_clicked()));
     connect(dialogProblem_ui->spinTextSize, SIGNAL(valueChanged(int)),
@@ -38,6 +47,16 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(on_bTextBold_toggled(bool)));
     connect(dialogProblem_ui->bTextUnderline, SIGNAL(toggled(bool)),
             this, SLOT(on_bTextUnderline_toggled(bool)));
+    connect(dialogProblem_ui->bTimerStart, SIGNAL(clicked()),
+            this, SLOT(on_bTimerStart_clicked()));
+    connect(timerTimer, SIGNAL(timeout()), this, SLOT(on_timerTimer_timeout()));
+    connect(dialogProblem_ui->bTimerStop, SIGNAL(clicked()),
+            this, SLOT(on_bTimerStop_clicked()));
+    connect(dialogProblem_ui->bWatchStart, SIGNAL(clicked()),
+            this, SLOT(on_bWatchStart_clicked()));
+    connect(timerStopWatch, SIGNAL(timeout()), this, SLOT(on_timerStopWatch_timeout()));
+    connect(dialogProblem_ui->bWatchStop, SIGNAL(clicked()),
+            this, SLOT(on_bWatchStop_clicked()));
 }
 
 MainWindow::~MainWindow()
@@ -83,6 +102,7 @@ void MainWindow::displayProblem(ProblemListItem *item)
 void MainWindow::setupUi()
 {
     ui->setupUi(this);
+
     dialogProblem_ui = new Ui::DialogProblem;
     dialogProblem = new QDialog(this);
     dialogProblem_ui->setupUi(dialogProblem);
@@ -228,11 +248,11 @@ void MainWindow::on_bRoll_clicked()
         return;
     }
     ui->bRoll->setEnabled(false);
-    timer->start();
+    timerRoll->start();
     ui->bStop->setEnabled(true);
 }
 
-void MainWindow::on_timeout()
+void MainWindow::on_timerRoll_timeout()
 {
     static int count = 0;
     int target_cnt = 1000 / hz;
@@ -253,7 +273,7 @@ void MainWindow::on_timeout()
 void MainWindow::on_bStop_clicked()
 {
     ui->bStop->setEnabled(false);
-    timer->stop();
+    timerRoll->stop();
     ui->listNAsked->setCurrentItem(currProblemItem);
     ui->listNRolled->setCurrentItem(currNameItem);
     transferCurrItem(ui->listNAsked, ui->listAsked);
@@ -312,4 +332,63 @@ void MainWindow::on_bTextUnderline_toggled(bool checked)
     QFont font = dialogProblem_ui->textBrowser->font();
     font.setUnderline(checked);
     dialogProblem_ui->textBrowser->setFont(font);
+}
+
+void MainWindow::on_bTimerStart_clicked()
+{
+    QTime time = dialogProblem_ui->timeEditLimit->time();
+    if (time == QTime(0,0)) return;
+
+    dialogProblem_ui->bTimerStart->setEnabled(false);
+    timeTimer = time;
+    dialogProblem_ui->labelTimer->setText(tr("%1:%2")
+                                          .arg(time.minute(),2,10,QLatin1Char('0'))
+                                          .arg(time.second(),2,10,QLatin1Char('0')));
+    timerTimer->start();
+    dialogProblem_ui->bTimerStop->setEnabled(true);
+}
+
+void MainWindow::on_timerTimer_timeout()
+{
+    timeTimer = timeTimer.addSecs(-1);
+    dialogProblem_ui->labelTimer->setText(tr("%1:%2")
+                                          .arg(timeTimer.minute(),2,10,QLatin1Char('0'))
+                                          .arg(timeTimer.second(),2,10,QLatin1Char('0')));
+    if (timeTimer == QTime(0,0)) {
+        timerTimer->stop();
+        QMessageBox::warning(dialogProblem, "Timer", "Time's up!");
+        dialogProblem_ui->bTimerStop->setEnabled(false);
+        dialogProblem_ui->bTimerStart->setEnabled(true);
+    }
+}
+
+void MainWindow::on_bTimerStop_clicked()
+{
+    timerTimer->stop();
+    dialogProblem_ui->bTimerStop->setEnabled(false);
+    dialogProblem_ui->bTimerStart->setEnabled(true);
+}
+
+void MainWindow::on_timerStopWatch_timeout()
+{
+    timeStopWatch = timeStopWatch.addSecs(1);
+    dialogProblem_ui->labelStopWatch->setText(tr("%1:%2")
+                                          .arg(timeStopWatch.minute(),2,10,QLatin1Char('0'))
+                                          .arg(timeStopWatch.second(),2,10,QLatin1Char('0')));
+}
+
+void MainWindow::on_bWatchStart_clicked()
+{
+    dialogProblem_ui->bWatchStart->setEnabled(false);
+    timeStopWatch = QTime(0,0);
+    dialogProblem_ui->labelStopWatch->setText(tr("00:00"));
+    timerStopWatch->start();
+    dialogProblem_ui->bWatchStop->setEnabled(true);
+}
+
+void MainWindow::on_bWatchStop_clicked()
+{
+    timerStopWatch->stop();
+    dialogProblem_ui->bWatchStart->setEnabled(true);
+    dialogProblem_ui->bWatchStop->setEnabled(false);
 }

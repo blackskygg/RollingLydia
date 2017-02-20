@@ -60,7 +60,7 @@ private slots:
 
     void on_bRoll_clicked();
 
-    void on_timeout();
+    void on_timerRoll_timeout();
 
     void on_bStop_clicked();
 
@@ -78,13 +78,29 @@ private slots:
 
     void on_bTextUnderline_toggled(bool checked);
 
+    void on_bTimerStart_clicked();
+
+    void on_timerTimer_timeout();
+
+    void on_timerStopWatch_timeout();
+
+    void on_bTimerStop_clicked();
+
+    void on_bWatchStart_clicked();
+
+    void on_bWatchStop_clicked();
+
 private:
     const QString sessionFileName = "RollingLydiaSession.txt";
 
     Ui::MainWindow *ui;
     Ui::DialogProblem *dialogProblem_ui;
     QDialog *dialogProblem;
-    QTimer *timer;
+    QTimer *timerRoll;
+    QTimer *timerTimer;
+    QTimer *timerStopWatch;
+    QTime timeTimer;
+    QTime timeStopWatch;
     ProblemListItem *currProblemItem = nullptr;
     QListWidgetItem *currNameItem = nullptr;
     int hz = 1;
