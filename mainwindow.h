@@ -64,9 +64,11 @@ private slots:
 
     void on_bStop_clicked();
 
-    void on_labelProblem_doubleClicked();
+    void on_labelProblem_clicked();
 
-    void on_horizFontSize_valueChanged(int value);
+    void on_spinTextSize_valueChanged(int value);
+
+    void on_fontComboBox_currentFontChanged(const QFont &f);
 
 private:
     const QString sessionFileName = "RollingLydiaSession.txt";
@@ -80,8 +82,9 @@ private:
     int hz = 1;
 
 private:
+    void setupUi();
     void closeEvent(QCloseEvent *event) override;
-    void loadSession();
+    bool loadSession();
     void saveSession();
     void transferCurrItem(QListWidget *listSrc, QListWidget *listDst);
     void displayProblem(ProblemListItem *item);

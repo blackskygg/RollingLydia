@@ -7,16 +7,13 @@
 #include <QFontDialog>
 #include <QDialog>
 #include <QMessageBox>
+#include <QTextBrowser>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    // Setup UI
-    ui->setupUi(this);
-    dialogProblem_ui = new Ui::DialogProblem;
-    dialogProblem = new QDialog(this);
-    dialogProblem_ui->setupUi(dialogProblem);
+    setupUi();
 
     // Setup Timer
     timer = new QTimer(this);
@@ -26,12 +23,11 @@ MainWindow::MainWindow(QWidget *parent) :
     // Connect Events
     connect(timer, SIGNAL(timeout()), SLOT(on_timeout()));
     connect(ui->labelProblem, SIGNAL(clicked(bool)),
-            this, SLOT(on_labelProblem_doubleClicked()));
-    connect(dialogProblem_ui->horizFontSize, SIGNAL(valueChanged(int)),
-            this, SLOT(on_horizFontSize_valueChanged(int)));
-
-    loadSession();
-    on_horizFontSize_valueChanged(19);
+            this, SLOT(on_labelProblem_clicked()));
+    connect(dialogProblem_ui->spinTextSize, SIGNAL(valueChanged(int)),
+            this, SLOT(on_spinTextSize_valueChanged(int)));
+    connect(dialogProblem_ui->fontComboBox, SIGNAL(currentFontChanged(QFont)),
+            this, SLOT(on_fontComboBox_currentFontChanged(QFont)));
 }
 
 MainWindow::~MainWindow()
@@ -42,12 +38,13 @@ MainWindow::~MainWindow()
 
 void MainWindow::saveSession()
 {
-
+    //TO DO
 }
 
-void MainWindow::loadSession()
+bool MainWindow::loadSession()
 {
-
+    //TODO
+    return false;
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -71,6 +68,20 @@ void MainWindow::displayProblem(ProblemListItem *item)
     dialogProblem_ui->textBrowser->append(item->text());
     dialogProblem_ui->textBrowser->append(item->content());
     dialogProblem->show();
+}
+
+void MainWindow::setupUi()
+{
+    ui->setupUi(this);
+    dialogProblem_ui = new Ui::DialogProblem;
+    dialogProblem = new QDialog(this);
+    dialogProblem_ui->setupUi(dialogProblem);
+
+    // Initialize states
+    if (loadSession()) return;  // If have prev session, restore it.
+
+    dialogProblem_ui->spinTextSize->setValue(17);
+    on_spinTextSize_valueChanged(17);
 }
 
 void MainWindow::on_bReloadName_clicked()
@@ -240,16 +251,22 @@ void MainWindow::on_bStop_clicked()
     ui->bRoll->setEnabled(true);
 }
 
-void MainWindow::on_labelProblem_doubleClicked()
+void MainWindow::on_labelProblem_clicked()
 {
     if (ui->bStop->isEnabled()) return; // Can't clicked till set.
     displayProblem(currProblemItem);
 }
 
-void MainWindow::on_horizFontSize_valueChanged(int value)
+void MainWindow::on_spinTextSize_valueChanged(int value)
 {
     QFont font = dialogProblem_ui->textBrowser->font();
     font.setPixelSize(value+1);
     dialogProblem_ui->textBrowser->setFont(font);
-    dialogProblem_ui->labelFontSize->setText(tr("%1px").arg(value+1));
+}
+
+void MainWindow::on_fontComboBox_currentFontChanged(const QFont &f)
+{
+    QFont font = dialogProblem_ui->textBrowser->font();
+    font.setFamily(f.family());
+    dialogProblem_ui->textBrowser->setFont(font);
 }
