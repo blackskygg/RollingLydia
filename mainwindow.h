@@ -70,6 +70,14 @@ private slots:
 
     void on_fontComboBox_currentFontChanged(const QFont &f);
 
+    void on_bTextColor_clicked();
+
+    void on_bTextItalic_toggled(bool checked);
+
+    void on_bTextBold_toggled(bool checked);
+
+    void on_bTextUnderline_toggled(bool checked);
+
 private:
     const QString sessionFileName = "RollingLydiaSession.txt";
 
