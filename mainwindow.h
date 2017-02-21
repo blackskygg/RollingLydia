@@ -94,7 +94,7 @@ private:
 private:
     void setupUi();
     void closeEvent(QCloseEvent *event) override;
-    bool loadSession();
+    void loadSession();
     void saveSession();
     void transferCurrItem(QListWidget *listSrc, QListWidget *listDst);
     void displayProblem(QListWidgetItem *item);

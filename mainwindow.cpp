@@ -57,6 +57,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(timerStopWatch, SIGNAL(timeout()), this, SLOT(on_timerStopWatch_timeout()));
     connect(dialogProblem_ui->bWatchStop, SIGNAL(clicked()),
             this, SLOT(on_bWatchStop_clicked()));
+
+    loadSession();  // If have prev session, restore it
+
+    // Apply Configuration
+    config.applyToUi(*ui, *dialogProblem_ui);
 }
 
 MainWindow::~MainWindow()
@@ -67,13 +72,33 @@ MainWindow::~MainWindow()
 
 void MainWindow::saveSession()
 {
-    //TO DO
+    QMessageBox::StandardButton ret = QMessageBox::warning(
+                this, tr("RollingLydia"),
+                tr("Do you want to save the current session?"),
+                QMessageBox::Yes | QMessageBox::No);
+    if (QMessageBox::No == ret) return;
+    QFile file("saved_session.json");
+    if (!file.open(QFile::Text|QFile::WriteOnly)) {
+        QMessageBox::warning(this, tr("RollingLydia"),
+                             tr("Can't open seesion file for writing."));
+        return;
+    }
+    config.fromUi(*ui, *dialogProblem_ui);
+    config.save(file);
+    file.close();
 }
 
-bool MainWindow::loadSession()
+void MainWindow::loadSession()
 {
-    //TODO
-    return false;
+    QFile file("saved_session.json");
+    if (!file.open(QFile::Text|QFile::ReadOnly))  return;
+    QMessageBox::StandardButton ret = QMessageBox::warning(
+                this, tr("RollingLydia"),
+                tr("There is a saved session found. Restore it?"),
+                QMessageBox::Yes | QMessageBox::No);
+    if (QMessageBox::No == ret) return;
+    if (!config.load(file)) return;
+    file.close();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -102,14 +127,9 @@ void MainWindow::displayProblem(QListWidgetItem *item)
 void MainWindow::setupUi()
 {
     ui->setupUi(this);
-
     dialogProblem_ui = new Ui::DialogProblem;
     dialogProblem = new QDialog(this);
     dialogProblem_ui->setupUi(dialogProblem);
-
-    // Initialize states
-    loadSession();  // If have prev session, restore it.
-    config.viewer.applyToDialogProblemUi(*dialogProblem_ui);
 }
 
 void MainWindow::on_bReloadName_clicked()
@@ -127,6 +147,7 @@ void MainWindow::on_bReloadName_clicked()
     }
 
     ui->listNRolled->clear();
+    ui->listRolled->clear();
     QListWidgetItem *item;
     QString line;
     while (!file.atEnd()) {
@@ -155,6 +176,7 @@ void MainWindow::on_bReloadProblem_clicked()
     }
 
     ui->listNAsked->clear();
+    ui->listAsked->clear();
     QListWidgetItem *item;
     QString text, line;
     QStringList content;
