@@ -145,7 +145,7 @@ void MainWindow::on_bReloadName_clicked()
 void MainWindow::on_bReloadProblem_clicked()
 {
     QString filename =
-        QFileDialog::getOpenFileName(this, "Please choose the problem list file.");
+        QFileDialog::getOpenFileName(this, "Please choose the question list file.");
     if (filename.isEmpty()) return;
 
     QFile file(filename);
@@ -244,7 +244,7 @@ void MainWindow::on_bRoll_clicked()
     }
 
     if (0 == ui->comboMode->currentIndex() && 0 == ui->listNAsked->count()) {
-        QMessageBox::warning(this, "RollingLydia", "Problem list is empty!");
+        QMessageBox::warning(this, "RollingLydia", "Question list is empty!");
         return;
     }
     ui->bRoll->setEnabled(false);
