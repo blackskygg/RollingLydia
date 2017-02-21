@@ -1,12 +1,12 @@
 # RollingLydia
-The program randomly picks up a name and a problem from a name list and a problem list, respectively.
+The program randomly picks up a name and a question from a name list and a question list, respectively.
 
 It's written to assist questioning in classrooms.
 
 Download the latest releases here: https://github.com/blackskygg/RollingLydia/releases
 
 # Usage
-The program is splitted into 3 tabs, namely, the Rolling Tab, the Name List Tab and the Problem List Tab.
+The program is splitted into 3 tabs, namely, the Rolling Tab, the Name List Tab and the Question List Tab.
 
 So it's natural to explain the 3 tabs one by one.
 
@@ -15,15 +15,15 @@ It looks like this.
 
 ![image](https://github.com/blackskygg/RollingLydia/blob/master/screenshots/rollingtab.png)
 
-Once you click the "Let's Roll" button, the program will start picking random names and problems from a preloaded list.
+Once you click the "Let's Roll" button, the program will start picking random names and questions from a preloaded list.
 
-When you click on the "Stop" button, the name and problem will stop changing, thus producing a result for you.
+When you click on the "Stop" button, the name and question will stop changing, thus producing a result for you.
 
-Once the roll is stoped, you can click on the problem title, and the description of the problem will popup.(See 3. the Problem List Tab for more information about the poped-up window).
+Once the roll is stoped, you can click on the question title, and the description of the question will popup.(See 3. the Question List Tab for more information about the poped-up window).
 
 The speed can be adjusted according to your need, and the unit is Hz(the number of names displayed within 1s).
 
-And you can also choose to roll the name only, which is useful when asking a question that's not in the problem list.
+And you can also choose to roll the name only, which is useful when asking a question that's not in the question list.
 
 ##2. the Name List Tab
 It looks like this.
@@ -49,7 +49,7 @@ The file should look like:
 
 See https://github.com/blackskygg/RollingLydia/blob/master/namelist.txt for an example.
 
-##3. the Problem List Tab
+##3. the Question List Tab
 It looks like this.
 
 ![image](https://github.com/blackskygg/RollingLydia/blob/master/screenshots/problem_list.png)
@@ -60,24 +60,24 @@ When you double-click on an item, a window will pop up for you, and it looks lik
 
 ![image](https://github.com/blackskygg/RollingLydia/blob/master/screenshots/problem.png)
 
-### the Name List Format
-The problem list file should follow the following format and should be also be saved using ``UTF-8 encoding``.
+### the Question List Format
+The question list file should follow the following format and should be also be saved using ``UTF-8 encoding``.
 
 The file should look like:
 
     BEGIN
-    problem title 1
-    problem description 1
+    question title 1
+    question description 1
     ...
     END
     ...
     （arbitary contents)
     ...
     BEGIN
-    problem title 2 
-    problem description 2
+    question title 2 
+    question description 2
     ...
     END
     ...
   
-See https://github.com/blackskygg/RollingLydia/blob/master/problemlist.txt for an example.
+See https://github.com/blackskygg/RollingLydia/blob/master/examples/questionlist.txt for an example.
