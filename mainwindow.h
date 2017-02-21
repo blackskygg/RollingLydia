@@ -6,7 +6,7 @@
 #include <QTimer>
 #include <QCloseEvent>
 #include "ui_viewproblem.h"
-#include "configuration.h"
+#include "session.h"
 
 namespace Ui {
 class MainWindow;
@@ -78,7 +78,7 @@ private slots:
 private:
     const QString sessionFileName = "RollingLydiaSession.txt";
 
-    Configuration config;
+    Session session;
     Ui::MainWindow *ui;
     Ui::DialogProblem *dialogProblem_ui;
     QDialog *dialogProblem;

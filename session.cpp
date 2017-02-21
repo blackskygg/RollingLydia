@@ -1,4 +1,4 @@
-#include "configuration.h"
+#include "session.h"
 #include "ui_viewproblem.h"
 #include "ui_mainwindow.h"
 #include <QTextBrowser>
@@ -12,7 +12,7 @@
 #include <QPalette>
 #include <QListWidgetItem>
 
-int Configuration::load(QFile &file)
+int Session::load(QFile &file)
 {
     QJsonDocument jsonDoc = QJsonDocument::fromJson(file.readAll());
     QJsonObject jsonObj = jsonDoc.object();
@@ -21,7 +21,7 @@ int Configuration::load(QFile &file)
     return 0;
 }
 
-int Configuration::save(QFile &file)
+int Session::save(QFile &file)
 {
     QJsonDocument jsonDoc;
     jsonDoc.setObject(toJson());
@@ -30,13 +30,13 @@ int Configuration::save(QFile &file)
     return 0;
 }
 
-void Configuration::fromJson(const QJsonObject &obj)
+void Session::fromJson(const QJsonObject &obj)
 {
     mainObj.fromJson(obj["mainwindow"].toObject());
     viewerObj.fromJson(obj["problemviewer"].toObject());
 }
 
-QJsonObject Configuration::toJson()
+QJsonObject Session::toJson()
 {
     QJsonObject obj;
     obj["mainwindow"] = mainObj.toJson();
@@ -44,13 +44,13 @@ QJsonObject Configuration::toJson()
     return obj;
 }
 
-void Configuration::fromUi(const Ui::MainWindow &mainUi, const Ui::DialogProblem &dialogUi)
+void Session::fromUi(const Ui::MainWindow &mainUi, const Ui::DialogProblem &dialogUi)
 {
     mainObj.fromMainWindowUi(mainUi);
     viewerObj.fromDialogProblemUi(dialogUi);
 }
 
-void Configuration::applyToUi(Ui::MainWindow &mainUi, Ui::DialogProblem &dialogUi)
+void Session::applyToUi(Ui::MainWindow &mainUi, Ui::DialogProblem &dialogUi)
 {
     mainObj.applyToMainWindowUi(mainUi);
     viewerObj.applyToDialogProblemUi(dialogUi);
