@@ -60,8 +60,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     loadSession();  // If have prev session, restore it
 
-    // Apply Configuration
-    config.applyToUi(*ui, *dialogProblem_ui);
+    // Apply Session
+    session.applyToUi(*ui, *dialogProblem_ui);
 }
 
 MainWindow::~MainWindow()
@@ -84,9 +84,9 @@ void MainWindow::saveSession()
         return;
     }
 
-    Configuration new_config;
-    new_config.fromUi(*ui, *dialogProblem_ui);
-    new_config.save(file);
+    Session new_session;
+    new_session.fromUi(*ui, *dialogProblem_ui);
+    new_session.save(file);
     file.close();
 }
 
@@ -99,7 +99,7 @@ void MainWindow::loadSession()
                 tr("There is a saved session found. Restore it?"),
                 QMessageBox::Yes | QMessageBox::No);
     if (QMessageBox::No == ret) return;
-    if (!config.load(file)) return;
+    if (!session.load(file)) return;
     file.close();
 }
 

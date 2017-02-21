@@ -1,5 +1,5 @@
-#ifndef CONFIGURATION_H
-#define CONFIGURATION_H
+#ifndef SESSION_H
+#define SESSION_H
 
 #include <QJsonObject>
 #include <QJsonArray>
@@ -88,10 +88,10 @@ private:
     int second = 0;
 };
 
-class Configuration
+class Session
 {
 public:
-    Configuration() = default;
+    Session() = default;
 
     void fromUi(const Ui::MainWindow &mainUi, const Ui::DialogProblem &dialogUi);
     void applyToUi(Ui::MainWindow &mainUi, Ui::DialogProblem &dialogUi);
@@ -108,4 +108,4 @@ public:
     ProblemViewerObject viewerObj;
 };
 
-#endif // CONFIGURATION_H
+#endif // SESSION_H
