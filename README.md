@@ -36,7 +36,7 @@ There are two lists, one containing the names that haven't been picked up yet, a
 
 The function of the button should be quite clear, and you can use them to move names between the two lists.
 
-### the Name List Format
+###2.1 the Name List Format
 The name list file should follow the following format and should be saved using the ``UTF-8 encoding``, this is very important.
 
 If you don't konw how. Use your favorite search engine.
@@ -58,7 +58,7 @@ It looks like this.
 
 It's almost the same with the Name List Tab, except that you can double-click on the list items to see the description of a question.
 
-### the Question Viewer
+###3.1 the Question Viewer
 
 When you double-click on an item, a question viewr will pop up for you, and it looks like this.
 
@@ -68,7 +68,7 @@ The text size, color and so on can be adjusted using the buttons on the tool bar
 
 A timer and a stopwatch is provided, which will be useful if you want to do some timed training. It's worth nothing that a dialog will pop up when time's up.
 
-### the Question List Format
+###3.2 the Question List Format
 The question list file should follow the following format and should be also be saved using ``UTF-8 encoding``.
 
 The file should look like:
@@ -90,6 +90,6 @@ The file should look like:
   
 See https://github.com/blackskygg/RollingLydia/blob/master/examples/questionlist.txt for an example.
 
-## Sessions
+##4. Sessions
 
 RollingLydia can save it's executing status when you close it(including rolling speed, name list status, question list status, question viewer configurations etc.), and you can choose whether to restore it or not when you lauch it again.
