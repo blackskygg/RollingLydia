@@ -3,35 +3,65 @@
 #include "ui_viewproblem.h"
 #include <QFile>
 #include <QDir>
+#include <QTime>
+#include <QPalette>
 #include <QFileDialog>
 #include <QFontDialog>
+#include <QColorDialog>
 #include <QDialog>
 #include <QMessageBox>
+#include <QTextBrowser>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    // Setup UI
-    ui->setupUi(this);
-    dialogProblem_ui = new Ui::DialogProblem;
-    dialogProblem = new QDialog(this);
-    dialogProblem_ui->setupUi(dialogProblem);
+    setupUi();
 
-    // Setup Timer
-    timer = new QTimer(this);
-    timer->setInterval(1);
-    timer->stop();
+    // Setup Timers
+    timerRoll = new QTimer(this);
+    timerRoll->setInterval(1);
+    timerRoll->stop();
+
+    timerTimer = new QTimer(this);
+    timerTimer->setInterval(1000);
+    timerTimer->stop();
+
+    timerStopWatch = new QTimer(this);
+    timerStopWatch->setInterval(1000);
+    timerStopWatch->stop();
 
     // Connect Events
-    connect(timer, SIGNAL(timeout()), SLOT(on_timeout()));
+    connect(timerRoll, SIGNAL(timeout()), SLOT(on_timerRoll_timeout()));
     connect(ui->labelProblem, SIGNAL(clicked(bool)),
-            this, SLOT(on_labelProblem_doubleClicked()));
-    connect(dialogProblem_ui->horizFontSize, SIGNAL(valueChanged(int)),
-            this, SLOT(on_horizFontSize_valueChanged(int)));
+            this, SLOT(on_labelProblem_clicked()));
+    connect(dialogProblem_ui->spinTextSize, SIGNAL(valueChanged(int)),
+            this, SLOT(on_spinTextSize_valueChanged(int)));
+    connect(dialogProblem_ui->fontComboBox, SIGNAL(currentFontChanged(QFont)),
+            this, SLOT(on_fontComboBox_currentFontChanged(QFont)));
+    connect(dialogProblem_ui->bTextColor, SIGNAL(clicked()),
+            this, SLOT(on_bTextColor_clicked()));
+    connect(dialogProblem_ui->bTextItalic, SIGNAL(toggled(bool)),
+            this, SLOT(on_bTextItalic_toggled(bool)));
+    connect(dialogProblem_ui->bTextBold, SIGNAL(toggled(bool)),
+            this, SLOT(on_bTextBold_toggled(bool)));
+    connect(dialogProblem_ui->bTextUnderline, SIGNAL(toggled(bool)),
+            this, SLOT(on_bTextUnderline_toggled(bool)));
+    connect(dialogProblem_ui->bTimerStart, SIGNAL(clicked()),
+            this, SLOT(on_bTimerStart_clicked()));
+    connect(timerTimer, SIGNAL(timeout()), this, SLOT(on_timerTimer_timeout()));
+    connect(dialogProblem_ui->bTimerStop, SIGNAL(clicked()),
+            this, SLOT(on_bTimerStop_clicked()));
+    connect(dialogProblem_ui->bWatchStart, SIGNAL(clicked()),
+            this, SLOT(on_bWatchStart_clicked()));
+    connect(timerStopWatch, SIGNAL(timeout()), this, SLOT(on_timerStopWatch_timeout()));
+    connect(dialogProblem_ui->bWatchStop, SIGNAL(clicked()),
+            this, SLOT(on_bWatchStop_clicked()));
 
-    loadSession();
-    on_horizFontSize_valueChanged(19);
+    loadSession();  // If have prev session, restore it
+
+    // Apply Session
+    session.applyToUi(*ui, *dialogProblem_ui);
 }
 
 MainWindow::~MainWindow()
@@ -42,12 +72,35 @@ MainWindow::~MainWindow()
 
 void MainWindow::saveSession()
 {
+    QMessageBox::StandardButton ret = QMessageBox::warning(
+                this, tr("RollingLydia"),
+                tr("Do you want to save the current session?"),
+                QMessageBox::Yes | QMessageBox::No);
+    if (QMessageBox::No == ret) return;
+    QFile file("saved_session.json");
+    if (!file.open(QFile::Text|QFile::WriteOnly)) {
+        QMessageBox::warning(this, tr("RollingLydia"),
+                             tr("Can't open seesion file for writing."));
+        return;
+    }
 
+    Session new_session;
+    new_session.fromUi(*ui, *dialogProblem_ui);
+    new_session.save(file);
+    file.close();
 }
 
 void MainWindow::loadSession()
 {
-
+    QFile file("saved_session.json");
+    if (!file.open(QFile::Text|QFile::ReadOnly))  return;
+    QMessageBox::StandardButton ret = QMessageBox::warning(
+                this, tr("RollingLydia"),
+                tr("There is a saved session found. Restore it?"),
+                QMessageBox::Yes | QMessageBox::No);
+    if (QMessageBox::No == ret) return;
+    if (!session.load(file)) return;
+    file.close();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -63,14 +116,22 @@ void MainWindow::transferCurrItem(QListWidget *listSrc, QListWidget *listDst)
     listDst->addItem(item);
 }
 
-void MainWindow::displayProblem(ProblemListItem *item)
+void MainWindow::displayProblem(QListWidgetItem *item)
 {
     if (nullptr == item) return;
 
     dialogProblem_ui->textBrowser->clear();
     dialogProblem_ui->textBrowser->append(item->text());
-    dialogProblem_ui->textBrowser->append(item->content());
+    dialogProblem_ui->textBrowser->append(item->data(Qt::UserRole).toString());
     dialogProblem->show();
+}
+
+void MainWindow::setupUi()
+{
+    ui->setupUi(this);
+    dialogProblem_ui = new Ui::DialogProblem;
+    dialogProblem = new QDialog(this);
+    dialogProblem_ui->setupUi(dialogProblem);
 }
 
 void MainWindow::on_bReloadName_clicked()
@@ -88,6 +149,7 @@ void MainWindow::on_bReloadName_clicked()
     }
 
     ui->listNRolled->clear();
+    ui->listRolled->clear();
     QListWidgetItem *item;
     QString line;
     while (!file.atEnd()) {
@@ -104,7 +166,7 @@ void MainWindow::on_bReloadName_clicked()
 void MainWindow::on_bReloadProblem_clicked()
 {
     QString filename =
-        QFileDialog::getOpenFileName(this, "Please choose the problem list file.");
+        QFileDialog::getOpenFileName(this, "Please choose the question list file.");
     if (filename.isEmpty()) return;
 
     QFile file(filename);
@@ -116,6 +178,7 @@ void MainWindow::on_bReloadProblem_clicked()
     }
 
     ui->listNAsked->clear();
+    ui->listAsked->clear();
     QListWidgetItem *item;
     QString text, line;
     QStringList content;
@@ -133,7 +196,8 @@ void MainWindow::on_bReloadProblem_clicked()
                 content.append(line);
         };
 
-        item = new ProblemListItem(text, ui->listNAsked, content.join(""));
+        item = new QListWidgetItem(text, ui->listNAsked);
+        item->setData(Qt::UserRole, QVariant(content.join("")));
         item->setSizeHint(QSize(item->sizeHint().width(), 20));
     }
 
@@ -181,12 +245,12 @@ void MainWindow::on_bPushProblem_clicked()
 
 void MainWindow::on_listNAsked_itemDoubleClicked(QListWidgetItem *item)
 {
-    displayProblem((ProblemListItem *)item);
+    displayProblem(item);
 }
 
 void MainWindow::on_listAsked_itemDoubleClicked(QListWidgetItem *item)
 {
-    displayProblem((ProblemListItem *)item);
+    displayProblem(item);
 }
 
 void MainWindow::on_horizSpeed_valueChanged(int value)
@@ -203,15 +267,15 @@ void MainWindow::on_bRoll_clicked()
     }
 
     if (0 == ui->comboMode->currentIndex() && 0 == ui->listNAsked->count()) {
-        QMessageBox::warning(this, "RollingLydia", "Problem list is empty!");
+        QMessageBox::warning(this, "RollingLydia", "Question list is empty!");
         return;
     }
     ui->bRoll->setEnabled(false);
-    timer->start();
+    timerRoll->start();
     ui->bStop->setEnabled(true);
 }
 
-void MainWindow::on_timeout()
+void MainWindow::on_timerRoll_timeout()
 {
     static int count = 0;
     int target_cnt = 1000 / hz;
@@ -224,7 +288,7 @@ void MainWindow::on_timeout()
         if (0 == ui->comboMode->currentIndex()) {
             int index = qrand() % ui->listNAsked->count();
             ui->labelProblem->setText(ui->listNAsked->item(index)->text());
-            currProblemItem = (ProblemListItem *)ui->listNAsked->item(index);
+            currProblemItem = ui->listNAsked->item(index);
         }
     }
 }
@@ -232,7 +296,7 @@ void MainWindow::on_timeout()
 void MainWindow::on_bStop_clicked()
 {
     ui->bStop->setEnabled(false);
-    timer->stop();
+    timerRoll->stop();
     ui->listNAsked->setCurrentItem(currProblemItem);
     ui->listNRolled->setCurrentItem(currNameItem);
     transferCurrItem(ui->listNAsked, ui->listAsked);
@@ -240,16 +304,114 @@ void MainWindow::on_bStop_clicked()
     ui->bRoll->setEnabled(true);
 }
 
-void MainWindow::on_labelProblem_doubleClicked()
+void MainWindow::on_labelProblem_clicked()
 {
     if (ui->bStop->isEnabled()) return; // Can't clicked till set.
     displayProblem(currProblemItem);
 }
 
-void MainWindow::on_horizFontSize_valueChanged(int value)
+void MainWindow::on_spinTextSize_valueChanged(int value)
 {
     QFont font = dialogProblem_ui->textBrowser->font();
-    font.setPixelSize(value+1);
+    font.setPixelSize(value);
     dialogProblem_ui->textBrowser->setFont(font);
-    dialogProblem_ui->labelFontSize->setText(tr("%1px").arg(value+1));
+}
+
+void MainWindow::on_fontComboBox_currentFontChanged(const QFont &f)
+{
+    QFont font = dialogProblem_ui->textBrowser->font();
+    font.setFamily(f.family());
+    dialogProblem_ui->textBrowser->setFont(font);
+}
+
+void MainWindow::on_bTextColor_clicked()
+{
+    QPalette pal;
+    pal = dialogProblem_ui->textBrowser->palette();
+
+    QColor color = QColorDialog::getColor(pal.color(QPalette::Text), this, "Pick a color.");
+    if(color.isValid()) {
+        pal.setColor(QPalette::Text, color);
+        dialogProblem_ui->textBrowser->setPalette(pal);
+    }
+}
+
+void MainWindow::on_bTextItalic_toggled(bool checked)
+{
+    QFont font = dialogProblem_ui->textBrowser->font();
+    font.setItalic(checked);
+    dialogProblem_ui->textBrowser->setFont(font);
+}
+
+void MainWindow::on_bTextBold_toggled(bool checked)
+{
+    QFont font = dialogProblem_ui->textBrowser->font();
+    font.setBold(checked);
+    dialogProblem_ui->textBrowser->setFont(font);
+}
+
+void MainWindow::on_bTextUnderline_toggled(bool checked)
+{
+    QFont font = dialogProblem_ui->textBrowser->font();
+    font.setUnderline(checked);
+    dialogProblem_ui->textBrowser->setFont(font);
+}
+
+void MainWindow::on_bTimerStart_clicked()
+{
+    QTime time = dialogProblem_ui->timeEditLimit->time();
+    if (time == QTime(0,0)) return;
+
+    dialogProblem_ui->bTimerStart->setEnabled(false);
+    timeTimer = time;
+    dialogProblem_ui->labelTimer->setText(tr("%1:%2")
+                                          .arg(time.minute(),2,10,QLatin1Char('0'))
+                                          .arg(time.second(),2,10,QLatin1Char('0')));
+    timerTimer->start();
+    dialogProblem_ui->bTimerStop->setEnabled(true);
+}
+
+void MainWindow::on_timerTimer_timeout()
+{
+    timeTimer = timeTimer.addSecs(-1);
+    dialogProblem_ui->labelTimer->setText(tr("%1:%2")
+                                          .arg(timeTimer.minute(),2,10,QLatin1Char('0'))
+                                          .arg(timeTimer.second(),2,10,QLatin1Char('0')));
+    if (timeTimer == QTime(0,0)) {
+        timerTimer->stop();
+        QMessageBox::warning(dialogProblem, "Timer", "Time's up!");
+        dialogProblem_ui->bTimerStop->setEnabled(false);
+        dialogProblem_ui->bTimerStart->setEnabled(true);
+    }
+}
+
+void MainWindow::on_bTimerStop_clicked()
+{
+    timerTimer->stop();
+    dialogProblem_ui->bTimerStop->setEnabled(false);
+    dialogProblem_ui->bTimerStart->setEnabled(true);
+}
+
+void MainWindow::on_timerStopWatch_timeout()
+{
+    timeStopWatch = timeStopWatch.addSecs(1);
+    dialogProblem_ui->labelStopWatch->setText(tr("%1:%2")
+                                          .arg(timeStopWatch.minute(),2,10,QLatin1Char('0'))
+                                          .arg(timeStopWatch.second(),2,10,QLatin1Char('0')));
+}
+
+void MainWindow::on_bWatchStart_clicked()
+{
+    dialogProblem_ui->bWatchStart->setEnabled(false);
+    timeStopWatch = QTime(0,0);
+    dialogProblem_ui->labelStopWatch->setText(tr("00:00"));
+    timerStopWatch->start();
+    dialogProblem_ui->bWatchStop->setEnabled(true);
+}
+
+void MainWindow::on_bWatchStop_clicked()
+{
+    timerStopWatch->stop();
+    dialogProblem_ui->bWatchStart->setEnabled(true);
+    dialogProblem_ui->bWatchStop->setEnabled(false);
 }

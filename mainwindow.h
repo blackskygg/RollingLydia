@@ -6,26 +6,11 @@
 #include <QTimer>
 #include <QCloseEvent>
 #include "ui_viewproblem.h"
+#include "session.h"
 
 namespace Ui {
 class MainWindow;
 }
-
-class ProblemListItem : public QListWidgetItem
-{
-public:
-    ProblemListItem(const QString &text, QListWidget *view, const QString &content) :
-        QListWidgetItem(text, view)
-    {
-        content_ = content;
-    }
-
-    QString &content() {return content_;}
-private:
-    QString content_;
-
-
-};
 
 class MainWindow : public QMainWindow
 {
@@ -60,31 +45,59 @@ private slots:
 
     void on_bRoll_clicked();
 
-    void on_timeout();
+    void on_timerRoll_timeout();
 
     void on_bStop_clicked();
 
-    void on_labelProblem_doubleClicked();
+    void on_labelProblem_clicked();
 
-    void on_horizFontSize_valueChanged(int value);
+    void on_spinTextSize_valueChanged(int value);
+
+    void on_fontComboBox_currentFontChanged(const QFont &f);
+
+    void on_bTextColor_clicked();
+
+    void on_bTextItalic_toggled(bool checked);
+
+    void on_bTextBold_toggled(bool checked);
+
+    void on_bTextUnderline_toggled(bool checked);
+
+    void on_bTimerStart_clicked();
+
+    void on_timerTimer_timeout();
+
+    void on_timerStopWatch_timeout();
+
+    void on_bTimerStop_clicked();
+
+    void on_bWatchStart_clicked();
+
+    void on_bWatchStop_clicked();
 
 private:
     const QString sessionFileName = "RollingLydiaSession.txt";
 
+    Session session;
     Ui::MainWindow *ui;
     Ui::DialogProblem *dialogProblem_ui;
     QDialog *dialogProblem;
-    QTimer *timer;
-    ProblemListItem *currProblemItem = nullptr;
+    QTimer *timerRoll;
+    QTimer *timerTimer;
+    QTimer *timerStopWatch;
+    QTime timeTimer;
+    QTime timeStopWatch;
+    QListWidgetItem *currProblemItem = nullptr;
     QListWidgetItem *currNameItem = nullptr;
     int hz = 1;
 
 private:
+    void setupUi();
     void closeEvent(QCloseEvent *event) override;
     void loadSession();
     void saveSession();
     void transferCurrItem(QListWidget *listSrc, QListWidget *listDst);
-    void displayProblem(ProblemListItem *item);
+    void displayProblem(QListWidgetItem *item);
 };
 
 

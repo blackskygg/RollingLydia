@@ -258,7 +258,7 @@
                 </property>
                 <item>
                  <property name="text">
-                  <string>Name &amp;&amp; Problem</string>
+                  <string>Name &amp;&amp; Question</string>
                  </property>
                 </item>
                 <item>
@@ -361,7 +361,7 @@
       </widget>
       <widget class="QWidget" name="tab">
        <attribute name="title">
-        <string>Problem List</string>
+        <string>Qestion List</string>
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
