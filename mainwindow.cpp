@@ -89,13 +89,13 @@ void MainWindow::transferCurrItem(QListWidget *listSrc, QListWidget *listDst)
     listDst->addItem(item);
 }
 
-void MainWindow::displayProblem(ProblemListItem *item)
+void MainWindow::displayProblem(QListWidgetItem *item)
 {
     if (nullptr == item) return;
 
     dialogProblem_ui->textBrowser->clear();
     dialogProblem_ui->textBrowser->append(item->text());
-    dialogProblem_ui->textBrowser->append(item->content());
+    dialogProblem_ui->textBrowser->append(item->data(Qt::UserRole).toString());
     dialogProblem->show();
 }
 
@@ -174,7 +174,8 @@ void MainWindow::on_bReloadProblem_clicked()
                 content.append(line);
         };
 
-        item = new ProblemListItem(text, ui->listNAsked, content.join(""));
+        item = new QListWidgetItem(text, ui->listNAsked);
+        item->setData(Qt::UserRole, QVariant(content.join("")));
         item->setSizeHint(QSize(item->sizeHint().width(), 20));
     }
 
@@ -222,12 +223,12 @@ void MainWindow::on_bPushProblem_clicked()
 
 void MainWindow::on_listNAsked_itemDoubleClicked(QListWidgetItem *item)
 {
-    displayProblem((ProblemListItem *)item);
+    displayProblem(item);
 }
 
 void MainWindow::on_listAsked_itemDoubleClicked(QListWidgetItem *item)
 {
-    displayProblem((ProblemListItem *)item);
+    displayProblem(item);
 }
 
 void MainWindow::on_horizSpeed_valueChanged(int value)
@@ -265,7 +266,7 @@ void MainWindow::on_timerRoll_timeout()
         if (0 == ui->comboMode->currentIndex()) {
             int index = qrand() % ui->listNAsked->count();
             ui->labelProblem->setText(ui->listNAsked->item(index)->text());
-            currProblemItem = (ProblemListItem *)ui->listNAsked->item(index);
+            currProblemItem = ui->listNAsked->item(index);
         }
     }
 }
