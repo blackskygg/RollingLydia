@@ -5,6 +5,8 @@ It's written to assist questioning in classrooms.
 
 Download the latest releases here: https://github.com/blackskygg/RollingLydia/releases
 
+See the changelog here: https://github.com/blackskygg/RollingLydia/blob/master/CHANGELOG.md
+
 # Usage
 The program is splitted into 3 tabs, namely, the Rolling Tab, the Name List Tab and the Question List Tab.
 
@@ -54,11 +56,17 @@ It looks like this.
 
 ![image](https://github.com/blackskygg/RollingLydia/blob/master/screenshots/questionlist.png)
 
-It's almost the same with the Name List Tab, except that you can double-click on the list items to see the description of a program.
+It's almost the same with the Name List Tab, except that you can double-click on the list items to see the description of a question.
 
-When you double-click on an item, a window will pop up for you, and it looks like this.
+### the Question Viewer
+
+When you double-click on an item, a question viewr will pop up for you, and it looks like this.
 
 ![image](https://github.com/blackskygg/RollingLydia/blob/master/screenshots/question.png)
+
+The text size, color and so on can be adjusted using the buttons on the tool bar.
+
+A timer and a stopwatch is provided, which will be useful if you want to do some timed training. It's worth nothing that a dialog will pop up when time's up.
 
 ### the Question List Format
 The question list file should follow the following format and should be also be saved using ``UTF-8 encoding``.
