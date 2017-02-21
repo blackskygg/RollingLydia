@@ -52,13 +52,13 @@ See https://github.com/blackskygg/RollingLydia/blob/master/examples/namelist.txt
 ##3. the Question List Tab
 It looks like this.
 
-![image](https://github.com/blackskygg/RollingLydia/blob/master/screenshots/problem_list.png)
+![image](https://github.com/blackskygg/RollingLydia/blob/master/screenshots/questionlist.png)
 
 It's almost the same with the Name List Tab, except that you can double-click on the list items to see the description of a program.
 
 When you double-click on an item, a window will pop up for you, and it looks like this.
 
-![image](https://github.com/blackskygg/RollingLydia/blob/master/screenshots/problem.png)
+![image](https://github.com/blackskygg/RollingLydia/blob/master/screenshots/question.png)
 
 ### the Question List Format
 The question list file should follow the following format and should be also be saved using ``UTF-8 encoding``.
