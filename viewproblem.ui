@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>View Problem</string>
+   <string>View Question</string>
   </property>
   <property name="whatsThis">
    <string>Text Color</string>
