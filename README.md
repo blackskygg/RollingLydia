@@ -47,7 +47,7 @@ The file should look like:
     name4
     ...
 
-See https://github.com/blackskygg/RollingLydia/blob/master/namelist.txt for an example.
+See https://github.com/blackskygg/RollingLydia/blob/master/examples/namelist.txt for an example.
 
 ##3. the Question List Tab
 It looks like this.
