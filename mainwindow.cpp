@@ -83,8 +83,10 @@ void MainWindow::saveSession()
                              tr("Can't open seesion file for writing."));
         return;
     }
-    config.fromUi(*ui, *dialogProblem_ui);
-    config.save(file);
+
+    Configuration new_config;
+    new_config.fromUi(*ui, *dialogProblem_ui);
+    new_config.save(file);
     file.close();
 }
 
@@ -311,7 +313,7 @@ void MainWindow::on_labelProblem_clicked()
 void MainWindow::on_spinTextSize_valueChanged(int value)
 {
     QFont font = dialogProblem_ui->textBrowser->font();
-    font.setPixelSize(value+1);
+    font.setPixelSize(value);
     dialogProblem_ui->textBrowser->setFont(font);
 }
 
