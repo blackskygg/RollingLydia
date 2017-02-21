@@ -89,3 +89,7 @@ The file should look like:
     ...
   
 See https://github.com/blackskygg/RollingLydia/blob/master/examples/questionlist.txt for an example.
+
+## Sessions
+
+RollingLydia can save it's executing status when you close it(including rolling speed, name list status, question list status, question viewer configurations etc.), and you can choose whether to restore it or not when you lauch it again.
