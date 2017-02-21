@@ -108,10 +108,8 @@ void MainWindow::setupUi()
     dialogProblem_ui->setupUi(dialogProblem);
 
     // Initialize states
-    if (loadSession()) return;  // If have prev session, restore it.
-
-    dialogProblem_ui->spinTextSize->setValue(17);
-    on_spinTextSize_valueChanged(17);
+    loadSession();  // If have prev session, restore it.
+    config.viewer.applyToDialogProblemUi(*dialogProblem_ui);
 }
 
 void MainWindow::on_bReloadName_clicked()
