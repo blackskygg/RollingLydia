@@ -32,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent) :
     timerStopWatch->stop();
 
     // Connect Events
-    connect(timerRoll, SIGNAL(timeout()), SLOT(on_timeRoll_timeout()));
+    connect(timerRoll, SIGNAL(timeout()), SLOT(on_timerRoll_timeout()));
     connect(ui->labelProblem, SIGNAL(clicked(bool)),
             this, SLOT(on_labelProblem_clicked()));
     connect(dialogProblem_ui->spinTextSize, SIGNAL(valueChanged(int)),
