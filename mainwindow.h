@@ -11,22 +11,6 @@ namespace Ui {
 class MainWindow;
 }
 
-class ProblemListItem : public QListWidgetItem
-{
-public:
-    ProblemListItem(const QString &text, QListWidget *view, const QString &content) :
-        QListWidgetItem(text, view)
-    {
-        content_ = content;
-    }
-
-    QString &content() {return content_;}
-private:
-    QString content_;
-
-
-};
-
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -101,7 +85,7 @@ private:
     QTimer *timerStopWatch;
     QTime timeTimer;
     QTime timeStopWatch;
-    ProblemListItem *currProblemItem = nullptr;
+    QListWidgetItem *currProblemItem = nullptr;
     QListWidgetItem *currNameItem = nullptr;
     int hz = 1;
 
@@ -111,7 +95,7 @@ private:
     bool loadSession();
     void saveSession();
     void transferCurrItem(QListWidget *listSrc, QListWidget *listDst);
-    void displayProblem(ProblemListItem *item);
+    void displayProblem(QListWidgetItem *item);
 };
 
 
