@@ -361,7 +361,7 @@
       </widget>
       <widget class="QWidget" name="tab">
        <attribute name="title">
-        <string>Qestion List</string>
+        <string>Question List</string>
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
