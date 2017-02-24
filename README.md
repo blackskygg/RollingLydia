@@ -25,7 +25,7 @@ Once the roll is stoped, you can click on the question title, and the descriptio
 
 The speed can be adjusted according to your need, and the unit is Hz(the number of names displayed within 1s).
 
-And you can also choose to roll the name only, which is useful when asking a question that's not in the question list.
+And you can also choose to roll the name only(Settings->Mode->Name Only), which is useful when asking a question that's not in the question list.
 
 ##2. the Name List Tab
 It looks like this.
